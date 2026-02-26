@@ -4,6 +4,9 @@
 //credentials for WiFi connection
 #include "credentials.h"
 
+//OTA hostname
+#define OTA_HOSTNAME "ESP32_Meteo_Station"
+
 //OLED settings
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64

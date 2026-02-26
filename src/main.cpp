@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Wire.h>
+#include <ArduinoOTA.h>
 #include "config.h"
 #include "ClimateStation.h"
 #include "DisplayModule.h"
@@ -15,6 +16,7 @@ unsigned long lastAlert = 0;
 unsigned long lastUpdate = 0;
 
 void setupWiFi();
+void setupOTA();
 void handleRoot();
 
 void setup() {
@@ -33,6 +35,7 @@ void setup() {
     }
 
     setupWiFi();
+    setupOTA();
 
     server.on("/", handleRoot);
     server.begin();
@@ -40,6 +43,8 @@ void setup() {
 }
 
 void loop() {
+    ArduinoOTA.handle();
+
     server.handleClient();
     unsigned long currentMillis = millis();
 
@@ -80,6 +85,34 @@ void setupWiFi() {
     Serial.println("\nWiFi connected.");
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
+}
+
+void setupOTA() {
+    ArduinoOTA.setHostname(OTA_HOSTNAME);
+    ArduinoOTA.setPassword(OTA_PASSWORD);
+
+    ArduinoOTA.onStart([]() {
+        LOG_INFO("OTA Update Started");
+        myDisplay.showAlert("OTA UPDATING...");
+    });
+
+    ArduinoOTA.onEnd([]() {
+        LOG_INFO("OTA Update Finished");
+    });
+
+    ArduinoOTA.onError([](ota_error_t error) {
+        LOG_ERROR("OTA Error: " + String(error));
+        myDisplay.showAlert("OTA ERROR!");
+    });
+
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+        LOG_INFO("OTA Progress: " + String(progress * 100 / total) + "%");
+    });
+
+    ArduinoOTA.begin();
+    LOG_INFO("OTA Ready, hostname: " + ArduinoOTA.getHostname() );
+
+
 }
 
 void handleRoot() {
