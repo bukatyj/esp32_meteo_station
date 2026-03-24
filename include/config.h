@@ -2,7 +2,15 @@
 #define CONFIG_H
 
 //credentials for WiFi connection
-#include "credentials.h"
+
+// #include "credentials.h"
+#ifndef WIFI_SSID
+#define WIFI_SSID "fallback_ssid"
+#endif
+
+#ifndef WIFI_PASS
+#define WIFI_PASS "fallback_pass"
+#endif
 
 // Network settings
 #define WIFI_LOCAL_IP  192, 168, 0, 104
