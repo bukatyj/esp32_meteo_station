@@ -43,10 +43,6 @@ void loop() {
 void setupWiFi() {
     LOG_INFO("Connecting to WiFi...");
 
-    IPAddress local_IP(192, 168, 0, 104);    
-    IPAddress gateway(192, 168, 0, 1);       
-    IPAddress subnet(255, 255, 255, 0);
-
     WiFi.config(local_IP, gateway, subnet);
     WiFi.begin(WIFI_SSID, WIFI_PASS);
 
