@@ -36,12 +36,16 @@ void loop() {
     server.handleClient();
     unsigned long currentMillis = millis();
 
-    WeatherData currentData = station.getData();}
+    WeatherData currentData = station.getData();
 }
 
 
 void setupWiFi() {
     LOG_INFO("Connecting to WiFi...");
+
+    IPAddress local_IP(WIFI_LOCAL_IP);
+    IPAddress gateway(WIFI_GATEWAY);
+    IPAddress subnet(WIFI_SUBNET);
 
     WiFi.config(local_IP, gateway, subnet);
     WiFi.begin(WIFI_SSID, WIFI_PASS);
