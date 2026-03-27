@@ -9,10 +9,11 @@ pipeline {
     stages {
         stage('Build firmware') {
             steps {
-                docker.build(
-                    'meteo-station:latest',
-                    '--build-arg WIFI_SSID=${WIFI_SSID} --build-arg WIFI_PASSWORD=${WIFI_PASS} .'
-                )
+                script{
+                    docker.build(
+                        'meteo-station:latest',
+                        '--build-arg WIFI_SSID=${WIFI_SSID} --build-arg WIFI_PASSWORD=${WIFI_PASS} .'
+                    )}
             }
         }
 
@@ -42,5 +43,5 @@ pipeline {
         }
     }
 
-    
+
 }
