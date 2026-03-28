@@ -72,3 +72,5 @@ void handleRoot() {
     String page = WebInterface::buildDashboard(station.getData());
     server.send(200, "text/html", page);
 }
+
+//test message for git commit
