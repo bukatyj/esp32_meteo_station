@@ -4,11 +4,9 @@
 #include <Wire.h>
 #include "config.h"
 #include "ClimateStation.h"
-#include "DisplayModule.h"
 #include "WebInterface.h"
 
 ClimateStation station;
-DisplayModule myDisplay;
 WebServer server(80);
 
 unsigned long lastAlert = 0;
@@ -22,14 +20,9 @@ void setup() {
 
     Wire.begin(I2C_SDA, I2C_SCL);
 
-    if (!station.begin()) {
-        Serial.println("BME280 sensor fail!");
-        while (1);
-    }
-    
-    if (!myDisplay.begin()) {
-        Serial.println("OLED display fail!");
-        while (1);
+    if (!station.begin()) {           
+        LOG_ERROR("BME280 init failed!");
+        while (1) delay(1000);
     }
 
     setupWiFi();
@@ -44,26 +37,17 @@ void loop() {
     unsigned long currentMillis = millis();
 
     WeatherData currentData = station.getData();
-
-    if (currentMillis - lastAlert >= ALERT_INTERVAL) {
-        if (currentData.temp < TEMP_LOW) {
-            myDisplay.showAlert("COLD!");
-            lastAlert = currentMillis;
-        } else if (currentData.temp > TEMP_HIGH) {
-            myDisplay.showAlert("HOT!");
-            lastAlert = currentMillis;
-        }
-    }
-
-    if (currentMillis - lastUpdate >= 1000) {
-        myDisplay.showData(currentData);
-        lastUpdate = currentMillis;
-    }
 }
 
 
 void setupWiFi() {
     LOG_INFO("Connecting to WiFi...");
+
+    IPAddress local_IP(WIFI_LOCAL_IP);
+    IPAddress gateway(WIFI_GATEWAY);
+    IPAddress subnet(WIFI_SUBNET);
+
+    WiFi.config(local_IP, gateway, subnet);
     WiFi.begin(WIFI_SSID, WIFI_PASS);
 
     int attempts = 0;

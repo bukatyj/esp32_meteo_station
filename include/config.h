@@ -4,9 +4,10 @@
 //credentials for WiFi connection
 #include "credentials.h"
 
-//OLED settings
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
+// Network settings
+#define WIFI_LOCAL_IP  192, 168, 0, 104
+#define WIFI_GATEWAY   192, 168, 0, 1
+#define WIFI_SUBNET    255, 255, 255, 0
 
 // Hardware I2C pins and addresses
 #define I2C_SDA 21
